@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Web sockets test</title>
+</head>
+<body>
+<input id="name" value="" placeholder="用户名">
+<button id="login" type="button" onclick="login();" value="">登录</button><br>
+<br/><br/>
+<input id="data">
+<input id="uuid" placeholder="输入对象">
+<button type="button" onclick='SendData();'>发送消息</button>
+<br/><br/>
+<div id="info">
+</div>
+</body>
+
+<script type="text/javascript">
+  let ws;
+  function login() {
+    // ws用于判断用户点击此按钮时处于在线还是离线状态
+    if (!ws) {
+      let user = document.getElementById("name").value;//try catch try中异常，执行catch
+      try {
+        ws = new WebSocket("ws://127.0.0.1:9999/websocket/" + user);//连接服务器 发送到地址栏 与@ServerEndpoint的value对应
+        //ws.on****发生事件执行对应的操作(定义函数实现)
+        //创建websocket，就启动了
+        //ws.open 建立连接发生的事件
+        ws.onopen = function () {
+          console.log("已经与服务器建立了连接...");
+        };
+        /*接收并显示消息*/
+        //ws.onmessage接收消息时发生的事件
+        ws.onmessage = function (event) {
+          console.log("接收到服务器发送的数据 " + event.data);
+          //解析打印json
+          document.getElementById("info").innerHTML += event.data + "<br>";
+        };
+        ws.onclose = function () {
+          console.log("已经与服务器断开连接...");
+        };
+        ws.onerror = function () {
+          console.log("WebSocket异常！");
+        };
+      } catch (ex) {
+        alert(ex.message);
+      }
+      document.getElementById("login").innerHTML = "退出";
+    } else {
+      ws.close();
+      document.getElementById("login").innerHTML = "登录";
+      ws = null;
+    }
+  }
+  /*发送消息*/
+  function SendData() {
+    let data = document.getElementById("data").value;
+    let uuid = document.getElementById("uuid").value;
+    let json = JSON.stringify({"uuid":uuid,"datas":data})
+    try {
+      ws.send(json);
+    } catch (ex) {
+      alert(ex.message);
+    }
+  }
+</script>
+</html>
