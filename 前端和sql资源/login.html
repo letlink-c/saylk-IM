@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+    const datas = {
+        username:'admin',
+        password:'123',
+    }
+    axios.post('http://localhost:9998/login', datas)
+        .then(function (res){
+            if(res.data != null){
+                console.log(res.data.token);
+                localStorage.setItem('admin', JSON.stringify(res.data.token));
+            }
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+
+</script>
+</body>
+</html>

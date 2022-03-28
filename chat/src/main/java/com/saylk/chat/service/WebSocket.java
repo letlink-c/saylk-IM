@@ -117,7 +117,7 @@ public class WebSocket {
     }
 
     /**
-     * 消息推送
+     * 消息私发，群发推送
      *
      */
     public static void pushMessage_private(String user, String message, String uuid) {

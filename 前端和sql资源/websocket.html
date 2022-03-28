@@ -65,4 +65,16 @@
     }
   }
 </script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+
+     let token = JSON.parse(window.localStorage.getItem('admin'));
+     axios.post('http://localhost:9998/parseLogin', { headers: { Authorization: token }})
+             .then(function (res){
+               console.log(res)
+             })
+             .catch(function (error) {
+               console.log(error);
+             });
+</script>
 </html>
